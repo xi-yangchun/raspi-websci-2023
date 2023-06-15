@@ -5,9 +5,8 @@ int ledPin = 7;
 
 void setup() {
   pinMode(ledPin, OUTPUT);
-  Serial.println("Hello World");
 
-    // Begin serial communication
+  // Begin serial communication
   Serial.begin(9600);
 }
 
