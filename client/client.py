@@ -36,4 +36,4 @@ while True:
     if serOut.in_waiting > 0:
         lightOut = serOut.readline().decode('utf-8').rstrip()
         postServer(lightOut)
-        sleep(10)
+        sleep(10) # Check the light value every 10 seconds
