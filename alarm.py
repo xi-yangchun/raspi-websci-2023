@@ -2,6 +2,10 @@ import datetime
 import time
 import serial
 
+from pydub import AudioSegment
+from pydub.playback import play
+import time
+
 class alarmclock:
     def __init__(self):
         self.targ_hour=0
@@ -35,9 +39,9 @@ class alarmclock:
             if delta.total_seconds()<=0 and delta.total_seconds()>=-self.ring_duration*60:
                 if int(self.get_cds_line())<=self.th_0:
                     print('ring!!!! {}'.format(delta.total_seconds()))
+                    self.make_sound()
     
     def make_sound(self):
-        pass
-
-AC=alarmclock()
-AC.run_alarm_under_lux()
+        sound = AudioSegment.from_mp3("sound0.mp3")
+        play(sound)
+        time.sleep(1)
