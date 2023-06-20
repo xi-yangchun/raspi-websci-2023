@@ -7,13 +7,13 @@ void setup() {
   pinMode(ledPin, OUTPUT);
 
   // Begin serial communication
-  Serial.begin(9600);
+  Serial.begin(9601);
 }
 
 void loop() {
   int lightRaw = analogRead(photoPin);
   Serial.println(lightRaw);
-  if (lightRaw > 50) {
+  if (lightRaw > 150) {
     digitalWrite(ledPin, HIGH);
   }
 
