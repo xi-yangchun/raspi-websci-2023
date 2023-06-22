@@ -4,7 +4,6 @@ import serial
 
 from pydub import AudioSegment
 from pydub.playback import play
-from server import lo
 import time
 
 class alarmclock:
