@@ -17,6 +17,7 @@ class alarmclock:
         # Replace '/dev/cu.usbmodem1101' with your Arduino's serial port
         self.ser = ""#serial.Serial('/dev/cu.usbmodem1401', 9600)
         self.th_0=30
+        self.lo=0
     
     def get_lightIn(self):
         if self.ser.in_waiting > 0:
