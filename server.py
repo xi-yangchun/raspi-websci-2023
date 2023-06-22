@@ -33,6 +33,6 @@ def keep_alive():
 
 ## おまじない
 def run():
-    app.run(debug=False, port=8080)
+    app.run(debug=False, host="192.168.1.70")
 
 keep_alive()
