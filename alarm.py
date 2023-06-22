@@ -29,6 +29,7 @@ class alarmclock:
     def light_difference(self, lo):
         li = self.get_lightIn()
         difference = abs(lo - li)
+        print(difference)
         return difference
 
     def run_alarm_under_lux(self):
