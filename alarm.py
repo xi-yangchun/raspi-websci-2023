@@ -4,6 +4,7 @@ import serial
 
 from pydub import AudioSegment
 from pydub.playback import play
+from server import lo
 import time
 
 class alarmclock:
@@ -18,13 +19,18 @@ class alarmclock:
         self.ser = ""#serial.Serial('/dev/cu.usbmodem1401', 9600)
         self.th_0=30
     
-    def get_cds_line(self):
+    def get_lightIn(self):
         if self.ser.in_waiting > 0:
             line = self.ser.readline().decode('utf-8').rstrip()
             return line
         else:
             return '0'
     
+    def light_difference(self, lo):
+        li = self.get_lightIn()
+        difference = abs(lo - li)
+        return difference
+
     def run_alarm_under_lux(self):
         self.targ_hour=1
         self.targ_min=39
@@ -37,7 +43,7 @@ class alarmclock:
             dt_now=datetime.datetime.now()
             delta=(dt_targ-dt_now)
             if delta.total_seconds()<=0 and delta.total_seconds()>=-self.ring_duration*60:
-                if int(self.get_cds_line())<=self.th_0:
+                if int(self.light_difference())>=self.th_0:
                     print('ring!!!! {}'.format(delta.total_seconds()))
                     self.make_sound()
     

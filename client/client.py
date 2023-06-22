@@ -6,7 +6,6 @@ def postServer(lightOut: str):
     url = 'http://192.168.1.70:5000/'
 
     try:
-        print(data)
         response = requests.get(url, params={"lightOut": lightOut})
 
         # Check the response status code

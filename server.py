@@ -8,6 +8,7 @@ import alarm
 app = Flask(__name__)
 global AC
 AC=alarm.alarmclock()
+lo = 0
 """
 * 未実装のもの
  - クエリパラメータから受け取った時刻をACのtarg_hour,minに代入
