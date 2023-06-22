@@ -3,14 +3,11 @@ import serial
 from time import sleep
 
 def postServer(lightOut: str):
-    url = 'http://192.168.1.70:5000'
-
-    data = {
-        'lightOut': lightOut,
-    }
+    url = 'http://192.168.1.70:5000/'
 
     try:
-        response = requests.get(url, json=data)
+        print(data)
+        response = requests.get(url, params={"lightOut": lightOut})
 
         # Check the response status code
         if response.status_code == requests.codes.ok:
