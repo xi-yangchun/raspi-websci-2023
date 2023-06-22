@@ -15,7 +15,7 @@ class alarmclock:
         self.sensing=False
         self.ring_duration=5
         # Replace '/dev/cu.usbmodem1101' with your Arduino's serial port
-        self.ser = serial.Serial('/dev/cu.usbmodem1401', 9600)
+        self.ser = ""#serial.Serial('/dev/cu.usbmodem1401', 9600)
         self.th_0=30
     
     def get_cds_line(self):
