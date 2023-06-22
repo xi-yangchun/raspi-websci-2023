@@ -24,9 +24,15 @@ def postServer(lightOut: str):
 
 serOut = serial.Serial('/dev/tty.usbmodem21101', 9601)  # Replace '/dev/cu.usbmodem1101' with your Arduino's serial port
 
+count = 0
 while True:
     if serOut.in_waiting > 0:
         lightOut = serOut.readline().decode('utf-8').rstrip()
+        print()
         print(lightOut)
-        postServer(lightOut)
-        sleep(5) # Check the light value every 10 seconds
+        sleep(0.0001) # Check the light value every 10 seconds
+        count += 1
+        if count%100 == 0:
+            postServer(lightOut)
+            count = 0
+        

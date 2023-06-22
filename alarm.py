@@ -25,6 +25,10 @@ class alarmclock:
             return line
         else:
             return '0'
+        
+    def set_lo(self,new_lo):
+        self.lo = new_lo
+        return None
     
     def light_difference(self, lo):
         li = self.get_lightIn()

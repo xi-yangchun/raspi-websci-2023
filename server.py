@@ -18,7 +18,7 @@ def index():
     if request.method=="GET":
         if "lightOut" in request.args.keys():
             lo=int(request.args["lightOut"])
-            AC.lo = lo
+            AC.set_lo(lo)
             print(lo)
         if "th" in request.args.keys():
             th=int(request.args["th"])
