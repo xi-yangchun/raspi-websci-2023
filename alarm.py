@@ -34,6 +34,7 @@ class alarmclock:
         difference = abs(lo - self.li)
         return difference
     
+    #make_sound() need some improvements
     def run(self):
         while True:
             if self.ser.in_waiting > 0:
