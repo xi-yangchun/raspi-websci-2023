@@ -35,6 +35,29 @@ class alarmclock:
         difference = abs(lo - li)
         print(difference)
         return difference
+    
+    #make_sound() need some improvements
+    def run(self):
+        while True:
+            if self.ser.in_waiting > 0:
+                line1 = self.ser.readline().decode('utf-8').rstrip()
+                print("Light Ser1: {}".format(line1))  # Print the message received from Arduino
+                self.li=int(line1)
+                diff=self.calc_light_difference(self.lo)
+                print("diff light: {}".format(self.calc_light_difference(self.lo)))
+                if diff>=self.th_0:
+                    self.make_sound()
+            #time.sleep(1)
+    
+    def track_lightIn(self):
+        while True:
+            if self.ser.in_waiting > 0:
+                line1 = self.ser.readline().decode('utf-8').rstrip()
+                print("Light Ser1: {}".format(line1))  # Print the message received from Arduino
+                try:
+                    self.li=int(line1)
+                except:
+                    self.li=0
 
     def run_alarm_under_lux(self):
         self.targ_hour=1
