@@ -15,23 +15,25 @@ class alarmclock:
         self.sensing=False
         self.ring_duration=5
         # Replace '/dev/cu.usbmodem1101' with your Arduino's serial port
-        self.ser = serial.Serial('/dev/ttyACM0', 9600)
-        self.th_0=120
+        self.ser = ""#serial.Serial('/dev/cu.usbmodem1401', 9600)
+        self.th_0=30
         self.lo=0
-        self.li=0
     
     def get_lightIn(self):
         if self.ser.in_waiting > 0:
             line = self.ser.readline().decode('utf-8').rstrip()
             return line
+        else:
+            return '0'
         
     def set_lo(self,new_lo):
         self.lo = new_lo
-        print("lo:{}".format(self.lo))
         return None
     
-    def calc_light_difference(self, lo):
-        difference = abs(lo - self.li)
+    def light_difference(self, lo):
+        li = self.get_lightIn()
+        difference = abs(lo - li)
+        print(difference)
         return difference
     
     #make_sound() need some improvements
@@ -76,3 +78,4 @@ class alarmclock:
     def make_sound(self):
         sound = AudioSegment.from_mp3("sound0.mp3")
         play(sound)
+        time.sleep(1)

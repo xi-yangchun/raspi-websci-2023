@@ -19,7 +19,7 @@ def index():
         if "lightOut" in request.args.keys():
             lo=int(request.args["lightOut"])
             AC.set_lo(lo)
-            print("lo: {}".format(lo))
+            print(lo)
         if "th" in request.args.keys():
             th=int(request.args["th"])
             print(th)
@@ -37,4 +37,3 @@ def run():
     app.run(debug=False, host="192.168.1.70")
 
 keep_alive()
-AC.run()
