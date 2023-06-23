@@ -15,26 +15,46 @@ class alarmclock:
         self.sensing=False
         self.ring_duration=5
         # Replace '/dev/cu.usbmodem1101' with your Arduino's serial port
-        self.ser = ""#serial.Serial('/dev/cu.usbmodem1401', 9600)
-        self.th_0=30
+        self.ser = serial.Serial('/dev/ttyACM0', 9600)
+        self.th_0=120
         self.lo=0
+        self.li=0
     
     def get_lightIn(self):
         if self.ser.in_waiting > 0:
             line = self.ser.readline().decode('utf-8').rstrip()
             return line
-        else:
-            return '0'
         
     def set_lo(self,new_lo):
         self.lo = new_lo
+        print("lo:{}".format(self.lo))
         return None
     
-    def light_difference(self, lo):
-        li = self.get_lightIn()
-        difference = abs(lo - li)
-        print(difference)
+    def calc_light_difference(self, lo):
+        difference = abs(lo - self.li)
         return difference
+    
+    def run(self):
+        while True:
+            if self.ser.in_waiting > 0:
+                line1 = self.ser.readline().decode('utf-8').rstrip()
+                print("Light Ser1: {}".format(line1))  # Print the message received from Arduino
+                self.li=int(line1)
+                diff=self.calc_light_difference(self.lo)
+                print("diff light: {}".format(self.calc_light_difference(self.lo)))
+                if diff>=self.th_0:
+                    self.make_sound()
+            #time.sleep(1)
+    
+    def track_lightIn(self):
+        while True:
+            if self.ser.in_waiting > 0:
+                line1 = self.ser.readline().decode('utf-8').rstrip()
+                print("Light Ser1: {}".format(line1))  # Print the message received from Arduino
+                try:
+                    self.li=int(line1)
+                except:
+                    self.li=0
 
     def run_alarm_under_lux(self):
         self.targ_hour=1
@@ -55,4 +75,3 @@ class alarmclock:
     def make_sound(self):
         sound = AudioSegment.from_mp3("sound0.mp3")
         play(sound)
-        time.sleep(1)
