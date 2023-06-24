@@ -22,9 +22,13 @@ def index():
             print(lo)
         if "th" in request.args.keys():
             th=int(request.args["th"])
+            AC.set_th(th)
             print(th)
         if "alarm" in request.args.keys():
             altime=(request.args["alarm"])
+            #deal alarm time by splitting, for example
+            alis=altime.split(":")
+            AC.set_targ_time(int(alis[0]),int(alis[1]))
             print(altime)
     return render_template('index.html')
 
