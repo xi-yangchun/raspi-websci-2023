@@ -10,15 +10,15 @@ class alarmclock:
     def __init__(self):
         self.targ_hour=0
         self.targ_min=0
-        self.now_hour=0
-        self.now_min=0
+        self.dt_targ=None
         self.active_alarm=False
         self.sensing=False
-        self.ring_duration=5
+        self.ring_duration=30
         # Replace '/dev/cu.usbmodem1101' with your Arduino's serial port
         self.ser = serial.Serial('/dev/ttyACM0', 9600)
         self.th_0=120
         self.lo=0
+        self.set_targ_time(3,17)
     
     def get_lightIn(self):
         if self.ser.in_waiting > 0:
@@ -34,12 +34,15 @@ class alarmclock:
     def set_th(self,new_th):
         self.th_0=new_th
     
-    def set_targ_time(self,hour,min):
+    def set_targ_time(self,hour,minute):
         self.targ_hour=hour
-        self.targ_min=min
+        self.targ_min=minute
+        self.dt_targ=datetime.datetime.now()
+        self.dt_targ=self.dt_targ.replace(hour=self.targ_hour,
+                minute=self.targ_min,second=0,microsecond=0)
     
     def calc_light_difference(self, lo):
-        difference = abs(lo - self.li)
+        difference = lo - self.li
         return difference
     
     #make_sound() need some improvements
@@ -60,6 +63,14 @@ class alarmclock:
                     self.active_alarm=True
                 else:
                     self.active_alarm=False
+
+                    dt_now=datetime.datetime.now()
+                    delta=(self.dt_targ-dt_now)
+                    if delta.total_seconds()<=0 \
+                        and delta.total_seconds()>=-self.ring_duration:
+                        self.active_alarm=True
+                    else:
+                        self.active_alarm=False                    
             #time.sleep(1)
     
     #legacy function. not in use
@@ -98,5 +109,5 @@ class alarmclock:
             time.sleep(0.01)
     
     def make_sound(self):
-        sound = AudioSegment.from_mp3("sound0.mp3")
+        sound = AudioSegment.from_mp3("sound1.mp3")
         play(sound)
