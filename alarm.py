@@ -30,6 +30,13 @@ class alarmclock:
     def set_lo(self,new_lo):
         self.lo = new_lo
         return None
+
+    def set_th(self,new_th):
+        self.th_0=new_th
+    
+    def set_targ_time(self,hour,min):
+        self.targ_hour=hour
+        self.targ_min=min
     
     def calc_light_difference(self, lo):
         difference = abs(lo - self.li)
