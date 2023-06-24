@@ -12,11 +12,12 @@ class alarmclock:
         self.targ_min=0
         self.now_hour=0
         self.now_min=0
+        self.active_alarm=False
         self.sensing=False
         self.ring_duration=5
         # Replace '/dev/cu.usbmodem1101' with your Arduino's serial port
-        self.ser = ""#serial.Serial('/dev/cu.usbmodem1401', 9600)
-        self.th_0=30
+        self.ser = serial.Serial('/dev/ttyACM0', 9600)
+        self.th_0=120
         self.lo=0
     
     def get_lightIn(self):
@@ -30,10 +31,8 @@ class alarmclock:
         self.lo = new_lo
         return None
     
-    def light_difference(self, lo):
-        li = self.get_lightIn()
-        difference = abs(lo - li)
-        print(difference)
+    def calc_light_difference(self, lo):
+        difference = abs(lo - self.li)
         return difference
     
     #make_sound() need some improvements
@@ -42,22 +41,32 @@ class alarmclock:
             if self.ser.in_waiting > 0:
                 line1 = self.ser.readline().decode('utf-8').rstrip()
                 print("Light Ser1: {}".format(line1))  # Print the message received from Arduino
-                self.li=int(line1)
+                #convert serial from str to int.
+                #wrap by try block because it sometimes fails
+                try:
+                    self.li=int(line1)
+                except:
+                    self.li=self.lo
                 diff=self.calc_light_difference(self.lo)
                 print("diff light: {}".format(self.calc_light_difference(self.lo)))
                 if diff>=self.th_0:
-                    self.make_sound()
+                    self.active_alarm=True
+                else:
+                    self.active_alarm=False
             #time.sleep(1)
     
+    #legacy function. not in use
     def track_lightIn(self):
         while True:
             if self.ser.in_waiting > 0:
                 line1 = self.ser.readline().decode('utf-8').rstrip()
                 print("Light Ser1: {}".format(line1))  # Print the message received from Arduino
+                #convert serial from str to int.
+                #wrap by try block because it sometimes fails
                 try:
                     self.li=int(line1)
                 except:
-                    self.li=0
+                    self.li=self.lo
 
     def run_alarm_under_lux(self):
         self.targ_hour=1
@@ -75,7 +84,12 @@ class alarmclock:
                     print('ring!!!! {}'.format(delta.total_seconds()))
                     self.make_sound()
     
+    def hold_beep(self):
+        while True:
+            if self.active_alarm==True:
+                self.make_sound()
+            time.sleep(0.01)
+    
     def make_sound(self):
         sound = AudioSegment.from_mp3("sound0.mp3")
         play(sound)
-        time.sleep(1)

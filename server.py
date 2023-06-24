@@ -30,10 +30,13 @@ def index():
 
 def keep_alive():
     t = Thread(target=run)
+    t1=Thread(target=AC.run)
+    t2=Thread(target=AC.hold_beep)
     t.start()
+    t1.start()
+    t2.start()
 
 ## おまじない
 def run():
     app.run(debug=False, host="192.168.1.70")
-
 keep_alive()
